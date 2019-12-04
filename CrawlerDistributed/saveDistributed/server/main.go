@@ -1,14 +1,16 @@
 package main
 
 import (
+	"NewsSpider/CrawlerDistributed/config"
 	"NewsSpider/CrawlerDistributed/rpcSuppert"
 	"NewsSpider/CrawlerDistributed/saveDistributed"
+	"fmt"
 	"github.com/olivere/elastic/v7"
 	"log"
 )
 
 func main() {
-	log.Fatal(serverRpc(":1234", "stock_info"))
+	log.Fatal(serverRpc(fmt.Sprintf(":%d", config.ItemSaverPort), config.ElasticIndex))
 
 	//err := serverRpc(":1234", "stock_info")
 	//if err != nil {
