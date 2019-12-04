@@ -9,21 +9,20 @@ import (
 
 func main() {
 
-	const url  = "http://kuaixun.stcn.com/index.shtml"
+	const url = "http://kuaixun.stcn.com/index.shtml"
 	itemChan, err := newsSave.ItemSaver("stock_info")
 	if err != nil {
 		panic(err)
 	}
 
 	e := engine.ConcurrentEngine{
-		Scheduler: &scheduler.QueuedScheduler{},
+		Scheduler:   &scheduler.QueuedScheduler{},
 		WorkerCount: 3,
-		ItemChan: itemChan,
+		ItemChan:    itemChan,
 	}
 
 	e.Run(engine.Request{
-		Url:        url,
-		ParserFunc: parser.NewsListParser,
+		Url:    url,
+		Parser: engine.NewFuncParser(parser.NewsListParser, "NewsListParser"),
 	})
 }
-

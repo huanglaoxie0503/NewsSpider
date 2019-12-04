@@ -24,7 +24,7 @@ func main() {
 	}
 
 	e.Run(engine.Request{
-		Url:        url,
-		ParserFunc: parser.NewsListParser,
+		Url:    url,
+		Parser: engine.NewFuncParser(parser.NewsListParser, "NewsListParser"),
 	})
 }
