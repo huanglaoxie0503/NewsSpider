@@ -16,7 +16,7 @@ func TestItemSaver(t *testing.T) {
 
 	time.Sleep(time.Second)
 
-	client, err := rpcSuppert.NewClient(host)
+	client, err := rpcSuppert.NewClientRpc(host)
 	if err != nil {
 		panic(err)
 	}

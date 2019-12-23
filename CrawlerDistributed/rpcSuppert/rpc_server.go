@@ -7,7 +7,7 @@ import (
 	"net/rpc/jsonrpc"
 )
 
-//ServerRpc
+//rpc Server
 func ServerRpc(host string, service interface{}) error {
 	// rpc 包装服务
 	_ = rpc.Register(service)
@@ -25,7 +25,8 @@ func ServerRpc(host string, service interface{}) error {
 	return nil
 }
 
-func NewClient(host string) (*rpc.Client, error) {
+// rpc Client
+func NewClientRpc(host string) (*rpc.Client, error) {
 	conn, err := net.Dial("tcp", host)
 	if err != nil {
 		panic(err)

@@ -8,7 +8,7 @@ import (
 )
 
 func ItemSaver(host string) (chan engine.Item, error) {
-	client, err := rpcSuppert.NewClient(host)
+	client, err := rpcSuppert.NewClientRpc(host)
 	if err != nil {
 		return nil, err
 	}
