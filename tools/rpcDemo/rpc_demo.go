@@ -2,19 +2,22 @@ package rpcDemo
 
 import "errors"
 
-type DemoService struct {}
+// Service.Method
 
-type Args struct {
+type DemoService struct{}
+
+type Params struct {
 	A, B int
 }
 
-func (DemoService) Div(args Args, result *float64) error {
-	if args.B == 0 {
+// 做一个除法
+func (DemoService) Div(p Params, result *float64) error {
+	if p.B == 0 {
 		return errors.New("division by zero")
 	}
-	*result = float64(args.A) / float64(args.B)
+	*result = float64(p.A) / float64(p.B)
 
 	return nil
 }
 
-// {"method":"DemoService.Div", "params": [{"A":5, "B": 0}], "id":1}
+// {"method":"DemoService.Div", "params": [{"A":5, "B": 10}], "id":1}
