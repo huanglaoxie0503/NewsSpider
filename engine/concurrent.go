@@ -21,28 +21,32 @@ type ReadyNotifier interface {
 	WorkerReady(chan Request)
 }
 
-func (e *ConcurrentEngine) Run(seeds ...Request) {
+func (c *ConcurrentEngine) Run(seeds ...Request) {
 	//in := make(chan Request)
+	// 初始化结果输出channel
 	out := make(chan ParseResult)
-	//e.Scheduler.ConfigureMasterWorkerChan(in)
-	e.Scheduler.Run()
+	//c.Scheduler.ConfigureMasterWorkerChan(in)
+	c.Scheduler.Run()
 
-	for i := 0; i < e.WorkerCount; i++ {
-		creatWorker(e.Scheduler.WorkerChan(), out, e.Scheduler)
+	// 传入 request 返回结果给 out channel
+	for i := 0; i < c.WorkerCount; i++ {
+		creatWorker(c.Scheduler.WorkerChan(), out, c.Scheduler)
 	}
 
+	// url 去重后把 request 提交给 调度器（Scheduler）
 	for _, r := range seeds {
 		if isDuplicate(r.Url) {
 			log.Printf("Duplicate request url list: "+"%s", r.Url)
 			continue
 		}
-		e.Scheduler.Submit(r)
+		c.Scheduler.Submit(r)
 	}
 
 	for {
 		result := <-out
 		for _, item := range result.Items {
-			go func() { e.ItemChan <- item }()
+			// 每一个 item 开一个 goroutine
+			go func() { c.ItemChan <- item }()
 		}
 		// url 去重
 		for _, request := range result.Requests {
@@ -50,7 +54,7 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 				log.Printf("Duplicate request: "+"%s", request.Url)
 				continue
 			}
-			e.Scheduler.Submit(request)
+			c.Scheduler.Submit(request)
 		}
 	}
 }

@@ -7,9 +7,10 @@ import (
 	"net/rpc/jsonrpc"
 )
 
+//ServerRpc
 func ServerRpc(host string, service interface{}) error {
 	// rpc 包装服务
-	rpc.Register(service)
+	_ = rpc.Register(service)
 	listener, err := net.Listen("tcp", host)
 	if err != nil {
 		return err

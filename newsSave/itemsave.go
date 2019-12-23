@@ -15,23 +15,25 @@ func ItemSaver(index string) (chan engine.Item, error) {
 	}
 
 	out := make(chan engine.Item)
+	// 每一个 item 开一个 goroutine
 	go func() {
 		itemCount := 0
 		for {
-			item := <- out
-			log.Printf("Item Saver : got item" + "#%d: %v", itemCount, item)
+			item := <-out
+			log.Printf("Item Saver : got item"+"#%d: %v", itemCount, item)
 			itemCount++
 
 			err := Save(client, index, item)
 			if err != nil {
-				log.Printf("Item Saver: error" + "saving item %v: %v", item, err)
+				log.Printf("Item Saver: error"+"saving item %v: %v", item, err)
 			}
 		}
 	}()
 	return out, nil
 }
 
-func Save(client *elastic.Client, index string, item engine.Item) error{
+// Save ES
+func Save(client *elastic.Client, index string, item engine.Item) error {
 	if item.Type == "" {
 		return errors.New("must supply Type")
 	}

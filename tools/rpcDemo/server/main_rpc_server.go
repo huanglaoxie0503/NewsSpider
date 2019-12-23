@@ -10,7 +10,7 @@ import (
 
 func main() {
 	// rpc 包装服务
-	rpc.Register(rpcDemo.DemoService{})
+	_ = rpc.Register(rpcDemo.DemoService{})
 	listener, err := net.Listen("tcp", ":1234")
 	if err != nil {
 		panic(err)
